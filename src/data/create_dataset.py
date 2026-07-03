@@ -14,7 +14,7 @@ from signal_generator import generate_bird_signal, generate_drone_signal
 
 FS = 1000
 DURATION = 1.0
-N_SEGMENTS_PER_CLASS = 20   # each segment = 1000 samples -> 20*1000 = 20000 samples per class
+N_SEGMENTS_PER_CLASS = 80   # more independent segments -> more real diversity, fewer near-duplicate windows dominating
 
 np.random.seed(42)
 
@@ -35,7 +35,6 @@ for v in drone_values:
 
 df = pd.DataFrame(rows)
 
-# SCRIPT_DIR = .../src/data  -> go up TWO levels to reach the project root
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "..", ".."))
 out_path = os.path.join(PROJECT_ROOT, "data", "raw", "Bird_Drone.xlsx")
