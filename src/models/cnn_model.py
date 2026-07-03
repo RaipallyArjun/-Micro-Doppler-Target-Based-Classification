@@ -35,7 +35,9 @@ def create_cnn_model():
         padding="same"
     ))
 
-    model.add(BatchNormalization())
+    # momentum lowered from default 0.99 -> 0.8 so running stats
+    # converge fast enough on a small dataset with few steps/epoch
+    model.add(BatchNormalization(momentum=0.8))
 
     model.add(MaxPooling2D(pool_size=(2, 2)))
 
@@ -50,7 +52,7 @@ def create_cnn_model():
         padding="same"
     ))
 
-    model.add(BatchNormalization())
+    model.add(BatchNormalization(momentum=0.8))
 
     model.add(MaxPooling2D(pool_size=(2, 2)))
 
@@ -65,7 +67,7 @@ def create_cnn_model():
         padding="same"
     ))
 
-    model.add(BatchNormalization())
+    model.add(BatchNormalization(momentum=0.8))
 
     model.add(MaxPooling2D(pool_size=(2, 2)))
 
