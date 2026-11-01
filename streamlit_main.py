@@ -18,6 +18,7 @@ st.set_page_config(
 st.title("Micro-Doppler Target Classification using CNN")
 
 WINDOW_SIZE = 1000
+DEFAULT_DATA = "data/raw/Bird_Drone.xlsx"   # bundled dataset, used when nothing is uploaded
 
 # =====================================================
 # LOAD MODEL
@@ -36,14 +37,15 @@ except Exception as e:
 # =====================================================
 
 uploaded_file = st.file_uploader(
-    "Upload Bird_Drone.xlsx",
+    "Upload Bird_Drone.xlsx (optional: the bundled dataset is used by default)",
     type=["xlsx"]
 )
 
-if uploaded_file is None:
+try:
+    df = pd.read_excel(uploaded_file if uploaded_file is not None else DEFAULT_DATA)
+except Exception as e:
+    st.error(f"Could not read the dataset: {e}")
     st.stop()
-
-df = pd.read_excel(uploaded_file)
 
 if not {"label", "value"}.issubset(df.columns):
     st.error("Excel must contain 'label' and 'value' columns.")
@@ -58,17 +60,21 @@ samples = []
 bird = df[df["label"] == 0]["value"].values
 drone = df[df["label"] == 1]["value"].values
 
+if len(bird) < WINDOW_SIZE or len(drone) < WINDOW_SIZE:
+    st.error(f"Each class needs at least {WINDOW_SIZE} samples.")
+    st.stop()
+
 # Two Bird Samples
 for _ in range(2):
 
-    start = np.random.randint(0, len(bird) - WINDOW_SIZE)
+    start = np.random.randint(0, len(bird) - WINDOW_SIZE + 1)
 
     samples.append((bird[start:start + WINDOW_SIZE], 0))
 
 # Two Drone Samples
 for _ in range(2):
 
-    start = np.random.randint(0, len(drone) - WINDOW_SIZE)
+    start = np.random.randint(0, len(drone) - WINDOW_SIZE + 1)
 
     samples.append((drone[start:start + WINDOW_SIZE], 1))
 

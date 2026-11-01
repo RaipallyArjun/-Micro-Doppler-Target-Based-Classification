@@ -14,7 +14,7 @@ from signal_generator import generate_bird_signal, generate_drone_signal
 
 FS = 1000
 DURATION = 1.0
-N_SEGMENTS_PER_CLASS = 80   # more independent segments -> more real diversity, fewer near-duplicate windows dominating
+N_SEGMENTS_PER_CLASS = 20   # more independent segments -> more real diversity, fewer near-duplicate windows dominating
 
 np.random.seed(42)
 
